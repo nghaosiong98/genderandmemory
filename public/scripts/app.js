@@ -69,6 +69,7 @@
   const correctAnswer = ["top", "right", "right","left", "bottom", "left", "left", "top", "bottom", "top", "bottom", "right"];
 
   var user_answer = []
+  var gender = ""
 
 
   function buildQuiz() {
@@ -137,6 +138,8 @@
   // // display quiz right away
   buildQuiz();
 
+  const maleButton = document.getElementById("male")
+  const femaleButton = document.getElementById("female")
   const topButton = document.getElementById("top");
   const bottomButton = document.getElementById("bottom");
   const leftButton = document.getElementById("left")
@@ -223,7 +226,7 @@
     )
 
     resultContainer.innerHTML = output.join("");
-    // upload(numWrong)
+    upload()
   }
 
   function move() {
@@ -269,9 +272,16 @@
   //   myTimer = setInterval(showNextSlide, 3500);
   // });
 
-$('#start-button').click(()=>{
+$('#male-button').click(()=>{
     $("main").hide();
+    gender = 'male';
     $("#firstquestion").show(500);
+})
+
+$('#female-button').click(()=>{
+  $("main").hide();
+  gender = 'female';
+  $("#firstquestion").show(500);
 })
 
 $('#firstbutton').click(()=>{
@@ -324,27 +334,27 @@ $('#submit').click(()=>{
   var db = firebase.database();
 
 
-  function upload(numWrong) {
+  function upload() {
     var docID = new Date().getTime()+"";
 
-    db.ref('users/' + userId).set({
-      username: name,
-      email: email,
-      profile_picture : imageUrl
-    });
-
-    db.collection("test").doc(docID).set({
-      // time: new Date().getTime() + "",
-      correct_01: correct01 + "",
-      correct_02: correct02 + "",
-      wrong: numWrong + ""
-    })
-    .then(function(docRef) {
-        console.log("Document written with ID: ", docID);
+    db.ref('users/' + docID).push({
+      gender: gender,
+      numCorrect: numCorrect,
+      user_answer : user_answer
+    }).then(function(docRef) {
+      console.log("Document written with ID: ", docID);
     })
     .catch(function(error) {
         console.error("Error adding document: ", error);
     });
+
+    // db.collection("test").doc(docID).set({
+    //   // time: new Date().getTime() + "",
+    //   correct_01: correct01 + "",
+    //   correct_02: correct02 + "",
+    //   wrong: numWrong + ""
+    // })
+    
   }
 
 })();
