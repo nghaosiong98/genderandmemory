@@ -70,7 +70,7 @@
 
   var user_answer = []
   var gender = ""
-
+  var currentSlide = 0;
 
   function buildQuiz() {
     // we'll need a place to store the HTML output
@@ -106,20 +106,27 @@
   }
 
   function showSlide(n) {
-    if (currentSlide === slides.length - 2){
-      // clearInterval(myTimer)
-      submitButton.style.display = "inline-block"
-      topButton.style.display = "none"
-      bottomButton.style.display = "none"
-      leftButton.style.display = "none"
-      rightButton.style.display = "none"
-    }else{
-      submitButton.style.display = "none"
-    }
+    console.log("currentslide= " + currentSlide)
+    console.log("n= " + n)
+    
     // move()
-    slides[currentSlide].classList.remove("active-slide");
-    slides[n].classList.add("active-slide");
-    currentSlide = n;
+
+    submitButton.style.display = "none"
+    if (currentSlide === slides.length-1){
+      // submitButton.style.display = "inline-block"
+      // topButton.style.display = "none"
+      // bottomButton.style.display = "none"
+      // leftButton.style.display = "none"
+      // rightButton.style.display = "none"
+      $("#question").hide();
+      console.log(user_answer)
+      showResult(user_answer);
+      $("#resultPage").show(500);
+    }else{
+      slides[currentSlide].classList.remove("active-slide");
+      slides[n].classList.add("active-slide");
+      currentSlide = n;
+    }
 
     
   }
@@ -146,7 +153,7 @@
   const rightButton = document.getElementById("right")
   const submitButton = document.getElementById("submit");
   const slides = document.querySelectorAll(".slide");
-  let currentSlide = 0;
+ 
 
 
   // sleep time expects milliseconds
@@ -295,26 +302,26 @@ $('#firstbutton').click(()=>{
 })
 
 $('#top').click(()=>{
-  showNextSlide();
   user_answer.push('top')
+  showNextSlide();
   console.log('top')
 })
 
 $('#bottom').click(()=>{
-  showNextSlide();
   user_answer.push('bottom')
+  showNextSlide();
   console.log('bottom')
 })
 
 $('#left').click(()=>{
-  showNextSlide();
   user_answer.push('left')
+  showNextSlide();
   console.log('left')
 })
 
 $('#right').click(()=>{
-  showNextSlide();
   user_answer.push('right')
+  showNextSlide();
   console.log('right')
 })
 
@@ -337,7 +344,7 @@ $('#submit').click(()=>{
   function upload() {
     var docID = new Date().getTime()+"";
 
-    db.ref('users/' + docID).pushg({
+    db.ref('users').child(docID).push({
       gender: gender,
       numCorrect: numCorrect,
       user_answer : user_answer
@@ -347,14 +354,6 @@ $('#submit').click(()=>{
     .catch(function(error) {
         console.error("Error adding document: ", error);
     });
-
-    // db.collection("test").doc(docID).set({
-    //   // time: new Date().getTime() + "",
-    //   correct_01: correct01 + "",
-    //   correct_02: correct02 + "",
-    //   wrong: numWrong + ""
-    // })
-    
   }
 
 })();
