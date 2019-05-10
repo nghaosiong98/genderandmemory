@@ -337,7 +337,7 @@ $('#submit').click(()=>{
   function upload() {
     var docID = new Date().getTime()+"";
 
-    db.ref('users/' + docID).push({
+    db.ref('users/' + docID).pushg({
       gender: gender,
       numCorrect: numCorrect,
       user_answer : user_answer
